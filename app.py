@@ -1,6 +1,21 @@
 import streamlit as st
 import PyPDF2
 import google.generativeai as genai
+def clean_ui():
+    hide_st_style = """
+        <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+        .stApp {
+            margin-top: -80px;
+        }
+        </style>
+    """
+    st.markdown(hide_st_style, unsafe_allow_html=True)
+
+# Call it immediately
+clean_ui()
 
 # --- App Configuration ---
 st.set_page_config(page_title="RFP Chat MVP", page_icon="📄")
@@ -62,7 +77,11 @@ with st.sidebar:
         st.warning("Please enter your Gemini API Key to chat.")
 
 # --- Main Interface ---
-st.title("RFP Automation MVP")
+col1, col2 = st.columns([1, 5])
+with col1:
+    st.image("https://cdn-icons-png.flaticon.com/512/2910/2910795.png", width=60) # Free shield icon
+with col2:
+    st.markdown("# RFP Shield \n *Automated Risk Detection*")
 st.write("Upload an RFP document and ask questions to get AI-assisted answers.")
 
 # Display Chat History
@@ -89,3 +108,7 @@ if prompt := st.chat_input("Ask a question about the RFP..."):
                 response_text = get_gemini_response(api_key, st.session_state.pdf_text, prompt)
                 st.markdown(response_text)
                 st.session_state.messages.append({"role": "assistant", "content": response_text})
+st.divider()
+st.caption("🔒 **Private Beta Mode** | Data processed via Google Gemini Enterprise API. Files are not stored permanently.")
+st.caption("© 2025 Sujith Automation Services. Generated advice should be verified by a human expert.")                
+
